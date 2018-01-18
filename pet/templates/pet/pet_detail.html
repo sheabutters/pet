@@ -1,0 +1,161 @@
+{% load staticfiles %}
+<html>
+
+<head>
+    <title>Pets</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <style>
+    h1 {text-align:center}
+    .container {margin:20px auto; width:100%}
+    .logSlide {width:100%}
+    ol {display:none; width:100%; position:absolute; background:rgba( 255, 255, 255, 0.8 ); z-index:1; list-style-type:none; margin:0; padding:10px}
+    .petroom {display:flex; justify-content:center; height:200px}
+    .petroom>canvas {width:150px; height:150px; border:1px solid #666}
+    nav {display:flex; justify-content:space-around; background:#83614a; padding:10px}
+    nav button {border-radius:20px; width:40px; height:40px; font-size:24px; border:0}
+    #userinfo {display:none; background:#83614a; position:absolute; z-index:1}
+
+    /* Media Query */
+    @media only screen and (min-width:500px)
+    {
+        .container {width:500px; background:rgba( 255, 255, 255, 0.5 ); border-radius:10px}
+        nav {border-radius:0 0 10px 10px}
+        ol {width:480px}
+    }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="bg" width="100%" height="100%">
+        이 브라우저는 HTML5 캔버스를 지원하지 않습니다.
+    </canvas>
+
+    <div class="container">
+
+        <header>
+            <h1>{{ pet.nickname }}</h1>
+            <ul>
+                <li id="age"></li>
+                <li>주인: {{ pet.owner }}</li>
+                <li>생일: {{ pet.created_date }}</li>
+            </ul>
+        </header>
+
+        <div>
+            <button type="button" class="logSlide">
+                {{ log_list.0.created_date|date:"m-d h:i a" }}
+                {{ log_list.0.user }}이(가)
+                {% if log_list.0.type == 'food' %}{{ pet.nickname }}에게 먹이를 주었습니다.
+                {% elif log_list.0.type == 'play' %}{{ pet.nickname }}와 놀았습니다.
+                {% elif log_list.0.type == 'clea' %}청소를 했습니다.
+                {% elif log_list.0.type == 'trai' %}{{ pet.nickname }}에게 훈련을 시켰습니다.
+                {% endif %}
+            </button>
+            <ol>
+                {#total {{ log_list|length }}번#}
+                {% for log in log_list %}
+                <li>
+                    {{ log.created_date|date:"m-d h:i a" }}
+                    {{ log.user }}이(가)
+                    {% if log.type == 'food' %}{{ pet.nickname }}에게 먹이를 주었습니다.
+                    {% elif log.type == 'play' %}{{ pet.nickname }}와 놀았습니다.
+                    {% elif log.type == 'clea' %}청소를 했습니다.
+                    {% elif log.type == 'trai' %}{{ pet.nickname }}에게 훈련을 시켰습니다.
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+
+        <div class="petroom">
+            <canvas id="myPet" width="150" height="150">
+                이 브라우저는 HTML5 캔버스를 지원하지 않습니다.
+            </canvas>
+        </div>
+
+        {% for key, value in pet.mng_log.items %}
+        {% if key == 'food' %}밥
+        {% elif key == 'clea' %}청소
+        {% elif key == 'play' %}놀기
+        {% elif key == 'trai' %}훈련
+        {% endif %}
+        <span id="{{ key }}">{{ value }}</span>
+        {% endfor %}
+
+        <nav>
+            <button class="petmng" name="food"><i class="material-icons">&#xE56C;</i></button>
+            <button class="petmng" name="clea"><i class="material-icons">&#xE3EA;</i></button>
+            <button class="petmng" name="play"><i class="fa fa-gamepad"></i></button>
+            <button class="petmng" name="trai"><i class="material-icons">&#xE91D;</i></button>
+            <button name="user" id="user"><i class="fa fa-address-book"></i></button>
+            <div id="userinfo">그냥 저냥<br>테스트<br></div>
+        </nav>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="{% static 'js/common.js' %}"></script>
+    <script type="text/javascript">
+        $(".petmng").click(function () {
+            var pk = '{{ pet.id }}';
+            var type = $(this).attr('name');
+            $.ajax({
+                type: "POST",
+                url: "{% url 'pet:pet_mng' %}",
+                data: {
+                    'pk': pk,
+                    'type': type,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                dataType: "json",
+                success: function (data) {
+                    $.each(data, function (key, value) {
+                        $("#" + key).text(value)
+                    })
+                }
+            });
+        })
+
+        //Slide Dropdown
+        $(document).ready(function () {
+            $('.logSlide').click(function () {
+                $('ol').slideToggle();
+            });
+        });
+
+        // Age
+        $(document).ready(function () {
+            $("#age").html('테스트');
+        })
+
+        function petState(){            
+            var petCanvas = document.getElementById('myPet'),
+                ctx = petCanvas.getContext('2d');
+                ctx.strokeStyle = "#bbb";
+                ctx.beginPath();
+                // arc(x, y, r, sAngle, eAngle, 반 시계 방향 )
+                // x 원 중심의 x 좌표 x
+                // y 원 중심의 y 좌표
+                // r 원의 반지름
+                // sAngle 시작 각도 (라디안) (0은 원호의 3시 위치에 있음)
+                // eAngle 끝 각도 (라디안)
+                // 시계 반대 방향 선택 사항. 도면을 시계 반대 방향으로할지 아니면 시계 방향으로할지 지정한다.
+                // False는 기본값이며 시계 방향을 나타내며 true는 반 시계 방향을 나타낸다.
+                ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
+                ctx.fillStyle = "#fff";
+                ctx.fill();
+                ctx.moveTo(110, 75);
+                ctx.arc(75, 75, 35, 0, Math.PI, false); // Mouth (clockwise)
+                ctx.moveTo(65, 65);
+                ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // Left eye
+                ctx.moveTo(95, 65);
+                ctx.arc(90, 65, 5, 0, Math.PI * 2, true); // Right eye
+                ctx.stroke();
+        }
+        petState();
+    </script>
+</body>
+
+</html>
