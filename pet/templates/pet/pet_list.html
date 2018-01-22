@@ -2,8 +2,11 @@
 <h3>펫 목록</h3>
 <ul>
 {% for pet in pet_list %}
-    <li><a href="{% url 'pet:pet_detail' pet.id %}">{{ pet }}</a></li>
+    <li>펫: <a href="{% url 'pet:pet_detail' pet.id %}">{{ pet }}</a>, 소유자 {{ pet.owner }}</li>
 {% endfor %}
 </ul>
 
-<a href="{% url 'pet:pet_new' %}">펫 만들기</a>
+<a href="{% url 'register' %}">펫 만들기</a>
+펫은 회원가입시 함께 만들어 집니다.
+
+<div><a href="{% url 'login' %}">로그인</a><a href="{% url 'logout' %}">로그아웃</a><a href="{% url 'register' %}">회원가입</a> </div>

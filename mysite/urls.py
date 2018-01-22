@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 from mysite import views
+from mysite.views import UserRegisterView, UserRegisterDoneView
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
@@ -25,4 +26,8 @@ urlpatterns = [
     # detail - pet의 id를 가지고 정보를 가져온다.
     # ajax를 통해 값을 주소 받는다.
     url(r'^admin/', admin.site.urls),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+
+    url(r'^accounts/register/$', UserRegisterView.as_view(), name='register'),
+    url(r'^accounts/register/done/$', UserRegisterDoneView.as_view(), name='register_done'),
 ]

@@ -120,3 +120,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 로그인하고 이동도하는 경로를 지정
+LOGIN_REDIRECT_URL = '/'
