@@ -3,34 +3,67 @@
 <head>
     <title>Pets</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Happy+Monkey" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/common.css' %}">
     <style>
         body {font-size:.9em}
         h1 {text-align:center}
+        header {height:120px; background:#ff7070; color:#222} /* ff708a */
+        header ul {text-align:center}
+        header li {display:inline-block}
+
+        ul {list-style-type:none; padding:0; margin:0}
+        .petInfo li {padding-left:.5em}
+        .petInfo span {padding-left:.21em}
+        .petname {font:normal 3.6em 'Nanum Pen Script', serif; width:100%; color:#fff; padding:19px 0 12px; margin:0}
+
+        nav {height:40px; display:flex; justify-content:space-around; background:#583e1d; padding:10px; position:relative}
+        nav button {background:#e6e6e6; color:#000; border-radius:20px; width:40px; height:40px; font-size:24px; border:0}
+
         .container {margin:20px auto; width:100%}
-        .logSlide {width:100%; border:0; background:#eee}
-        ol {display:none; width:100%; position:absolute; background:rgba( 255, 255, 255, 0.8 ); z-index:1; list-style-type:none; margin:0; padding:10px}
-        .petroom {display:flex; justify-content:center; height:200px}
-        .petroom>canvas {width:150px; height:150px; border:1px solid #666}
-        nav {display:flex; justify-content:space-around; background:#83614a; padding:10px}
-        nav button {border-radius:20px; width:40px; height:40px; font-size:24px; border:0}
-        #userinfo {display:none; background:#83614a; position:absolute; z-index:1}
-        .petInfo>ul {list-style-type:none; padding:0; margin:0}
-        li {display:inline-block}
-        footer p {width:100%; height:10%; background:#83614a; margin:0; padding:0; bottom:0; position:fixed}
+        .logSlide {width:100%; height:3em; border:0; background:#eee}
+        ol {display:none; width:100%; position:absolute; background:#ffffffe7; z-index:1; list-style-type:none; margin:0; padding:10px 10px 16px 10px; border-bottom:6px double #ddd}
+        .petroom {display:flex; justify-content:center; height:300px}
+        .petroom>canvas {width:450px; height:300px}
+        
+        #user {position:relative}
+        #userInfo {display:none; width:180px; height:158px; right:0; bottom:60px; position:absolute; background:#83614a; z-index:1; border-radius:5px 5px 0 0; padding:20px}
+        #userInfo::after {content:""; position:absolute; top:100%; right:47px; margin-left:-5px; border-width:7px; border-style:solid; border-color:#83614a transparent transparent transparent}
+        #userInfo i {margin-right:.6em}
+        #userInfo li {color:#fff; position:relative}
+        #userInfo label {display:flex; align-items:center; padding-bottom:.6em}
+        #userInfo label i {font-size:1.2em; margin-right:.28em}
+        #userInfo li a {display:block; padding:.6em 0; color:#fff; text-decoration:none}
+        
+        .state li {display:inline-block; font-family:'Happy Monkey', cursive, sans-serif; font-size:1.2em; padding:0 0 .1em .1em}
+        .state span {margin-left:-.2em}
+        .state li i {font-size:.9em; padding-left:.3em; margin-right:.2em; vertical-align:-.1em}
+        .state li:nth-child(3) i {vertical-align:.03em}
+
+        #changename {height:2em; padding:.4em .4em .5em; margin-bottom:.4em; color:#333; border:0; background:#a77e62; border-radius:2px}
+        #changenameres {position:absolute; font-size:.8em; color:#ffbcbc; right:.5em; padding:.4em 0 .3em}
+
+        
+        
+        footer p {width:100%; height:5%; background:#83614a; margin:0; padding:0; bottom:0; position:fixed}
+        
 
         /* Media Query */
         @media only screen and (min-width: 500px) {
-            .container {width:500px; background:rgba(255, 255, 255, 0.5); border-radius:10px}
-            nav {border-radius:0 0 10px 10px}
-            ol {width:480px}
+            /* inset : (선택 사항) 정의 된 경우 그림자가 요소 내부에 나타난다.
+            가로 : 요소로부터 x 거리
+            vertical : 요소로부터의 y 거리
+            blur : (선택 사항) blur 반경, 즉 blur가없는 경우 0
+            spread : (선택 사항) 그림자가 퍼지는 거리, 즉 1px는 모든 방향으로 그림자 1 픽셀을 확장하므로 부모 요소보다 2 배 넓고 높다.
+            color : 그림자 색상 */
+            .container {width:450px; background:#fff1e3; box-shadow:0 0 0 12px #d1eeeb, 0 0 6px 12px #888; border-radius:1px} /* eee7d1 */
+            ol {width:430px}
         }
     </style>
 </head>
 
 <body>
-<a href="{% url 'pet:pet_list' %}">광장</a>
 <canvas id="bg" width="100%" height="100%">
     이 브라우저는 HTML5 캔버스를 지원하지 않습니다.
 </canvas>
@@ -38,13 +71,11 @@
 <div class="container">
 
     <header>
-{#        <h1>{{ pet.nickname }}</h1>#}
-        <p><input type="text" value="{{ pet.nickname }}" id="changename" name="petname"><span id="changenameres"></span></p>
+        <h1 class="petname" id="petnameH1">{{ pet.nickname }}</h1>
         <ul class="petInfo">
-            <li id="age"></li>
-            <li>주인: {{ pet.owner }}</li>
-            <li>생일: {{ pet.created_date }}</li>
-            <li>나이: {{ pet.age }} 시간</li>
+            <li><b>주인</b><span>{{ pet.owner }}</span></li>
+            <li><b>생일</b><span id="birth"></span></li>
+            <li><b>나이</b><span id="age"></span></li>
         </ul>
     </header>
 
@@ -75,27 +106,43 @@
     </div>
 
     <div class="petroom">
-        <canvas id="myPet" width="150" height="150">
+        <canvas id="myPet" width="450" height="300">
             이 브라우저는 HTML5 캔버스를 지원하지 않습니다.
         </canvas>
     </div>
 
+    <ul class="state">
     {% for key, value in pet.mng_log.items %}
-        {% if key == 'food' %}밥
-        {% elif key == 'clea' %}청소
-        {% elif key == 'play' %}놀기
-        {% elif key == 'trai' %}훈련
+        <li>
+        {% if key == 'food' %}<i class="material-icons">&#xE56C;</i>
+        {% elif key == 'clea' %}<i class="material-icons">&#xE3EA;</i>
+        {% elif key == 'play' %}<i class="fa fa-gamepad"></i>
+        {% elif key == 'trai' %}<i class="material-icons">&#xE91D;</i>
         {% endif %}
         <span id="{{ key }}">{{ value }}</span>
+        </li>
     {% endfor %}
+    </ul>
 
     <nav>
-        <button class="petmng" name="food"><i class="material-icons">&#xE56C;</i></button>
-        <button class="petmng" name="clea"><i class="material-icons">&#xE3EA;</i></button>
-        <button class="petmng" name="play"><i class="fa fa-gamepad"></i></button>
-        <button class="petmng" name="trai"><i class="material-icons">&#xE91D;</i></button>
+        <button class="petmng" name="food" value="food"><i class="material-icons">&#xE56C;</i></button>
+        <button class="petmng" name="clea" value="clea"><i class="material-icons">&#xE3EA;</i></button>
+        <button class="petmng" name="play" value="play"><i class="fa fa-gamepad"></i></button>
+        <button class="petmng" name="trai" value="trai"><i class="material-icons">&#xE91D;</i></button>
         <button name="user" id="user"><i class="fa fa-address-book"></i></button>
-        <div id="userinfo">그냥 저냥<br>테스트<br></div>
+        <div id="userInfo">
+            <ul>
+            <li><label for="changename"><i class="material-icons">&#xe150;</i> 펫 이름 변경</label>
+            <input type="text" value="{{ pet.nickname }}" id="changename" name="petname"><span id="changenameres"></span></li>
+            <li><a href="{% url 'register' %}"><i class="fa">&#xf004;</i>펫만들기</a></li>
+            <li><a href="{% url 'pet:pet_list' %}"><i class="fa">&#xf0c9;</i>광장가기</a></li>
+            {% if user.is_active %}
+            <li><a href="{% url 'logout' %}"><i class="fa">&#xf08b;</i>로그아웃</a></li>
+            {% else %}
+            <li><a href="{% url 'login' %}"><i class="fa">&#xf08b;</i>로그인</a></li>
+            {% endif %}
+            </ul>
+        </div>
     </nav>
 </div>
 
@@ -104,6 +151,7 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="{% static 'js/common.js' %}"></script>
 <script type="text/javascript">
+    //Import Data
     $(".petmng").click(function () {
         var pk = '{{ pet.id }}';
         var type = $(this).attr('name');
@@ -121,6 +169,7 @@
 
     })
 
+    //AJAX Update data asynchronously
     function updatelog(data) {
         var pk = '{{ pet.id }}';
 
@@ -145,7 +194,7 @@
                             case 'trai': return '{{ pet.nickname }}에게 훈련을 시켰습니다.'; break;
                         };
                     }
-                    {$('#latest').text(value['month'] + '월' + value['day'] + '일 ' + value['hour'] + ':' + value['day'] + ' ' + value['user'] + '이(가) ' + type())}
+                    {$('#latest').text(value['month'] + '-' + value['day'] + ' ' + value['hour'] + ':' + value['minute'] + ' ' + value['user'] + '이(가) ' + type())}
                     // #console.log(key, value['type'], value['user'], value['year'], value['month'], value['day'], value['hour'], value['minute'])
                 });
             }
@@ -169,7 +218,8 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.state) {
-                        $('#changenameres').text("변경완료");
+                        $('#changenameres').text('변경완료❣');
+                        $('#petnameH1').text('{{ pet.nickname }}');
                     } else {
                         alert(data.message);
                         $('#changename').val(data.petname);
@@ -179,36 +229,77 @@
         })
     });
 
-    // Age
+    //Slide User Info
     $(document).ready(function () {
-        $("#age").html('테스트');
-    })
+        $('#user').click(function () {
+            $('#userInfo').slideToggle();
+        });
+    });
+
+    //Pet Profile
+    function petBirth(){
+        var exBirth = '{{ pet.created_date }}';
+        var num = exBirth.indexOf('일', 0);
+        $('#birth').text(exBirth.slice(0, num + 1));
+    }
+    petBirth();
+
+    function petAge(){
+        var hour = Number('{{ pet.age }}')
+        if (hour >= 24) {
+            var age = Math.floor(hour / 24);
+            $('#age').text(age + '살');
+        }
+        else if (hour < 24) {
+            $('#age').text('이제 막 태어났어요.')
+        };
+    };
+    petAge();
 
     function petState() {
         var petCanvas = document.getElementById('myPet'),
-            ctx = petCanvas.getContext('2d');
-        ctx.strokeStyle = "#bbb";
-        ctx.beginPath();
-        // arc(x, y, r, sAngle, eAngle, 반 시계 방향 )
-        // x 원 중심의 x 좌표 x
-        // y 원 중심의 y 좌표
-        // r 원의 반지름
-        // sAngle 시작 각도 (라디안) (0은 원호의 3시 위치에 있음)
-        // eAngle 끝 각도 (라디안)
-        // 시계 반대 방향 선택 사항. 도면을 시계 반대 방향으로할지 아니면 시계 방향으로할지 지정한다.
-        // False는 기본값이며 시계 방향을 나타내며 true는 반 시계 방향을 나타낸다.
-        ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // Outer circle
-        ctx.fillStyle = "#fff";
-        ctx.fill();
-        ctx.moveTo(110, 75);
-        ctx.arc(75, 75, 35, 0, Math.PI, false); // Mouth (clockwise)
-        ctx.moveTo(65, 65);
-        ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // Left eye
-        ctx.moveTo(95, 65);
-        ctx.arc(90, 65, 5, 0, Math.PI * 2, true); // Right eye
-        ctx.stroke();
-    }
+            ctx = petCanvas.getContext('2d'),
+            img = new Image();
 
+            img.addEventListener('load', function(){ctx.drawImage(img, 150, 100);});
+            img.src = '{% static "js/pet.png" %}';
+            
+
+        // ctx.strokeStyle = "#bbb";
+        // ctx.fillStyle = "#fff";
+        //                                 // arc(x, y, r, sAngle, eAngle, 반 시계 방향 )
+        //                                 // x 원 중심의 x 좌표 x
+        //                                 // y 원 중심의 y 좌표
+        //                                 // r 원의 반지름
+        //                                 // sAngle 시작 각도 (라디안) (0은 원호의 3시 위치에 있음)
+        //                                 // eAngle 끝 각도 (라디안)
+        //                                 // 시계 반대 방향 선택 사항. 도면을 시계 반대 방향으로할지 아니면 시계 방향으로할지 지정한다.
+        //                                 // False는 기본값이며 시계 방향을 나타내며 true는 반 시계 방향을 나타낸다.
+        // ctx.arc(25, 25, 20, 0, Math.PI * 2, true);
+        // ctx.stroke();
+        // ctx.fill();
+        // ctx.moveTo(125, 25);
+        // ctx.arc(125, 25, 20, 0, Math.PI * 2, true);
+        // ctx.stroke();
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.moveTo(15, 60);
+        //                                 // 제어점의 x 좌표 (P1)
+        //                                 // 제어점의 y 좌표 (P1)
+        //                                 // 끝점의 x 좌표 (P2)
+        //                                 // 끝점의 y 좌표 (P2)
+        //                                 // ctx.quadraticCurveTo (20, 80, 50, 110)
+        // ctx.stroke();
+        // ctx.fill();
+        
+        // ctx.moveTo(110, 75);
+        // ctx.arc(75, 75, 35, 0, Math.PI, false); // Mouth (clockwise)
+        // ctx.moveTo(65, 65);
+        // ctx.arc(60, 65, 5, 0, Math.PI * 2, true); // Left eye
+        // ctx.moveTo(95, 65);
+        // ctx.arc(90, 65, 5, 0, Math.PI * 2, true); // Right eye
+        // ctx.stroke();
+    }
     petState();
 </script>
 </body>

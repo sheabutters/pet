@@ -45,7 +45,7 @@
                 ctx.fillStyle = '#fff';    
         };
         // Random Clouds
-        for (var i = 0; i < 15; i++){
+        for (var i = 0; i < 20; i++){
             var randomX = Math.floor(Math.random() * 800),
                 randomY = Math.floor(Math.random() * 100),
                 randomS = Math.floor(Math.random() + 1.2),
