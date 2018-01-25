@@ -79,7 +79,7 @@
             <ul>
             <li><label for="changename"><i class="material-icons">&#xe150;</i> 펫 이름 변경</label>
             <input type="text" value="{{ pet.nickname }}" id="changename" name="petname"><span id="changenameres"></span></li>
-            <li><a href="{% url 'register' %}"><i class="fa">&#xf004;</i>펫만들기</a></li>
+            <li><a href="{% url 'password_change' %}"><i class="fa">&#xf013;</i>비밀번호 변경</a></li>
             <li><a href="{% url 'pet:pet_list' %}"><i class="fa">&#xf0c9;</i>광장가기</a></li>
             {% if user.is_active %}
             <li><a href="{% url 'logout' %}"><i class="fa">&#xf08b;</i>로그아웃</a></li>
