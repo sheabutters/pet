@@ -1,3 +1,60 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumpenscript.css);
+@import url(http://fonts.googleapis.com/earlyaccess/hanna.css);
 html, body {width:100%; height:100%; margin:0; border: 0; overflow: hidden; display: block}
+body {font-size:.85em; color:#222; font-family:'Nanum Gothic', sans-serif}
 #bg {width:100%; height:100%; position:absolute; top:0; left:0; z-index:-1}
+
+h1 {text-align:center}
+header {background:#ff7070; color:#222; padding-bottom:.6em} /* ff708a */
+header ul {text-align:center}
+header li {display:inline-block}
+
+ul {list-style-type:none; padding:0; margin:0}
+.petInfo li {padding-left:.5em}
+.petInfo span {padding-left:.21em}
+.petname {font:normal 3.6em 'Nanum Pen Script', serif; width:100%; color:#fff; padding:10px 0 5px; margin:0}
+
+nav {width:100%; position:absolute; bottom:0; height:4.8em; display:flex; justify-content:space-around; background:#583e1d}
+nav button {background:#e6e6e6; color:#000; border-radius:20px; width:40px; height:40px; font-size:24px; border:0; margin:10px}
+
+.container {margin:0 auto; width:100%; height:100%; position:relative}
+.logSlide {width:100%; height:3em; border:0; background:#eee}
+ol {display:none; position:absolute; background:#fffffff6; z-index:1; list-style-type:none; margin:0; padding:10px 10px 16px 10px; border-bottom:4px double #ddd}
+.petroom {display:flex; justify-content:center; height:100%}
+.petroom>canvas {position:absolute; bottom:20%; width:150px; height:154px}
+        
+#user {position:relative}
+#userInfo {display:none; width:180px; height:158px; right:0; bottom:4.8em; position:absolute; background:#83614a; z-index:1; border-radius:5px 5px 0 0; padding:20px}
+#userInfo::after {content:""; position:absolute; top:100%; right:40px; margin-left:-5px; border-width:7px; border-style:solid; border-color:#83614a transparent transparent transparent}
+#userInfo i {margin-right:.6em}
+#userInfo li {color:#fff; position:relative}
+#userInfo label {display:flex; align-items:center; padding-bottom:.6em}
+#userInfo label i {font-size:1.2em; margin-right:.28em}
+#userInfo li a {display:block; padding:.6em 0; color:#fff; text-decoration:none}
+        
+.state {position:absolute; bottom:4.8em; width:100%; background:#fff1e3}
+.state li {display:inline-block; font-family:'Happy Monkey', cursive, sans-serif; font-size:1.2em; padding:.15em 0 .1em .1em}
+.state span {margin-left:-.2em}
+.state li i {font-size:.9em; padding-left:.3em; margin-right:.2em; vertical-align:-.1em}
+.state li:nth-child(3) i {vertical-align:.03em}
+
+#changename {height:2em; padding:.4em .4em .5em; margin-bottom:.4em; color:#333; border:0; background:#a77e62; border-radius:2px}
+#changenameres {position:absolute; font-size:.8em; color:#ffbcbc; right:.5em; padding:.4em 0 .3em}
+footer p {display:none}        
+
+/* Media Query */
+@media only screen and (min-width: 500px) {
+    /* inset : (선택 사항) 정의 된 경우 그림자가 요소 내부에 나타난다.
+    가로 : 요소로부터 x 거리
+    vertical : 요소로부터의 y 거리
+    blur : (선택 사항) blur 반경, 즉 blur가없는 경우 0
+    spread : (선택 사항) 그림자가 퍼지는 거리, 즉 1px는 모든 방향으로 그림자 1 픽셀을 확장하므로 부모 요소보다 2 배 넓고 높다.
+    color : 그림자 색상 */
+    .container {width:450px; height:518px; background:#fff1e3; box-shadow:0 0 0 12px #d1eeeb, 0 0 6px 12px #888; border-radius:1px; margin:20px auto} /* eee7d1 */
+    ol {width:430px}
+    footer p {text-align:right; color:#d8bdad; width:100%; background:#775541; margin:0; font-size:.9em; padding:.4em 0 2em; bottom:0; position:fixed; display:block}
+    nav {position:relative; margin-bottom:4em}
+    .petroom {height:300px}
+    .petroom>canvas {bottom:126px}
+    .petname {padding:19px 0 12px}
+}

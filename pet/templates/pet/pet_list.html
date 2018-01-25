@@ -1,12 +1,79 @@
-<h1>펫 라운지</h1>
-<h3>펫 목록</h3>
-<ul>
-{% for pet in pet_list %}
-    <li>펫: <a href="{% url 'pet:pet_detail' pet.id %}">{{ pet }}</a>, 소유자 {{ pet.owner }}</li>
-{% endfor %}
-</ul>
+{% load staticfiles %}
+<html>
+<head>
+    <title>Pets</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <style>
+        header {display:flex; justify-content:center; padding:.5em 0}
+        header h1 a {color:#fff; font:normal 1.3em 'Hanna', serif; padding:0; text-decoration:none}
+        header i {font-size:2.2em}
+        h3 {text-align:center; font:normal 1.5em 'Hanna', serif; padding-top:.5em}
+        
+        .login {margin:35px auto; width:95%; box-shadow:0 0 1px 1px #c5c5c577; display:flex; justify-content:space-between; background:#ffffffaf}
 
-<a href="{% url 'register' %}">펫 만들기</a>
-펫은 회원가입시 함께 만들어 집니다.
+        table {width:90%; margin:16px auto; font-size:1em; border-collapse:collapse; border-bottom:2px solid #ffabab}
+        table a {text-decoration:none; color:#222}
+        
+        th {padding:.5em .5em .6em; background:#ffabab}
+        th:nth-child(1) {border-radius:3px 0 0 0; width:65%}
+        th:nth-child(2) {border-radius:0 3px 0 0; width:35%}
 
-<div><a href="{% url 'login' %}">로그인</a><a href="{% url 'logout' %}">로그아웃</a><a href="{% url 'register' %}">회원가입</a> </div>
+        tr:nth-child(even){background:#e0d9d1}
+        tr:nth-child(odd){background:#fff}
+        td {padding:.3em 1em .4em}
+        td:nth-child(even){text-align:center}
+        .home {font-size:1.4em; vertical-align:-.2em; padding-right:.2em; color:#583f9b}
+
+        .sign {margin:0 auto; width:260px; display:flex; justify-content:space-between}
+        .sign button {font:normal 1.3em 'Hanna', serif; color:#c43737; border-radius:25px; width:120px; height:50px; border:2px dashed #fff; box-shadow:0 0 0 3px #ffabab; background:#ffabab}
+        .sign button:nth-child(1) {box-shadow:0 0 0 3px #5edad3; background:#5edad3}
+
+        @media only screen and (min-width: 500px) {
+            table {margin:0 auto}
+            .login {width:360px; margin:35px auto; padding:20px}
+        }
+    </style>
+</head>
+
+<body>
+<canvas id="bg" width="100%" height="100%">
+    이 브라우저는 HTML5 캔버스를 지원하지 않습니다.
+</canvas>
+
+<div class="container">
+
+    <header>
+        <h1><a href="{% url 'home' %}" target="_self"><i class="fa">&#xf281;</i> 펫츠!</a></h1>
+    </header>
+
+    <h3>펫츠 식구들</h3>
+
+    <div class="login">
+    <table>
+        <tr>
+            <th>펫</th>
+            <th>소유자</th>  
+        </tr>
+        {% for pet in pet_list %}
+        <tr>         
+            <td><a href="{% url 'pet:pet_detail' pet.id %}"><i class="material-icons home">&#xe88a;</i>{{ pet }}</a></td>
+            <td>{{ pet.owner }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+
+    <div class="sign">
+        <button type="button" onclick="location.href='{% url 'login' %}'">로그인하기</button>
+        <button type="button" onclick="location.href='{% url 'register' %}'">펫 생성하기</button>
+    </div>
+</div>
+
+<footer><p>2018 Pets C19 CAR</p></footer>
+
+<script src="{% static 'js/common.js' %}"></script>
+</body>
+
+</html>
