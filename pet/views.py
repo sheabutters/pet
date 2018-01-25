@@ -63,7 +63,7 @@ def pet_mng(request):
 def pet_mng_log(request):
     pk = request.GET.get('pk', None)
     pet = get_object_or_404(Pet, pk=pk)
-    log_list = pet.mnglog_set.all().order_by('-created_date')[:10]
+    log_list = pet.mnglog_set.all().order_by('-created_date')[:1]
     data = []
     timezone = pytz.timezone('Asia/Seoul')
     for log in log_list:

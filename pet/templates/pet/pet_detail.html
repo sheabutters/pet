@@ -118,10 +118,6 @@
     function updatelog(data) {
         var pk = '{{ pet.id }}';
 
-        $.each(data, function (key, value) {
-            $("#" + key).text(value)
-        });
-
         $.ajax({
             type: "GET",
             url: "{% url 'pet:pet_mng_log' %}",
@@ -139,8 +135,8 @@
                             case 'trai': return '{{ pet.nickname }}에게 훈련을 시켰습니다.'; break;
                         };
                     }
-                    {$('#latest').text(value['month'] + '-' + value['day'] + ' ' + value['hour'] + ':' + value['minute'] + ' ' + value['user'] + '이(가) ' + type())}
-                    // #console.log(key, value['type'], value['user'], value['year'], value['month'], value['day'], value['hour'], value['minute'])
+                    $('#latest').text(value['month'] + '-' + value['day'] + ' ' + value['hour'] + ':' + value['minute'] + ' ' + value['user'] + '이(가) ' + type())
+
                 });
             }
         });
